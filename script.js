@@ -17,8 +17,6 @@ displayScrambledWord()
 startInteraction()
 
 function displayScrambledWord() {
-    // newId represents the amount of category containers on the page
-    // const buttons = document.getElementsByClassName("scrambled-grid");
     for (let i=0; i < scrambledLetters.length; i++){
         const letterTile = document.createElement("div")
         letterTile.className = "tile"
