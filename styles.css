@@ -224,6 +224,7 @@ body {
   border-radius: 0.25em;
   color: white;
   padding: 1em;
+  cursor: pointer;
 }
 
 #result{
