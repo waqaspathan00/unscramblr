@@ -40,6 +40,7 @@ body {
   border-radius: .25em;
   cursor: pointer;
   user-select: none;
+  touch-action: manipulation;
 }
 
 .key.large {
@@ -75,7 +76,7 @@ body {
   display: grid;
   justify-content: center;
   align-content: center;
-  grid-template-columns: repeat(7, 4em);
+  grid-template-columns: repeat(9, 4em);
   grid-template-rows: repeat(1, 4em);
   gap: .25em;
   margin: 1em 0;
@@ -102,6 +103,7 @@ body {
   align-items: center;
   user-select: none;
   transition: transform 250ms linear;
+  touch-action: manipulation;
 }
 
 .tile[data-state="active"] {
@@ -214,4 +216,16 @@ body {
 
 .alert.hide {
   opacity: 0;
+}
+
+.btn{
+  background-color: hsl(115, 29%, 43%);
+  border: none;
+  border-radius: 0.25em;
+  color: white;
+  padding: 1em;
+}
+
+#result{
+  display: none;
 }
