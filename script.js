@@ -1,4 +1,5 @@
-const VOWELS = ["A", "E", "I", "O", "U"]
+const VOWELS = "AEIOU"
+const CONSONANTS = "CBDFGHJKLMNPQRSTVWXYZ"
 const WORD_LENGTH = 5
 const FLIP_ANIMATION_DURATION = 500
 const DANCE_ANIMATION_DURATION = 500
@@ -10,8 +11,7 @@ const offsetFromDate = new Date(2022, 0, 1)
 const msOffset = Date.now() - offsetFromDate
 const dayOffset = msOffset / 1000 / 60 / 60 / 24
 const targetWord = targetWords[Math.floor(dayOffset)]
-const scrambledLetters = scramble(targetWord + choice(VOWELS) + choice(VOWELS))
-
+const scrambledLetters = scramble(targetWord + randomChoice(VOWELS) + randomChoice(VOWELS) + randomChoice(CONSONANTS) + randomChoice(CONSONANTS))
 
 displayScrambledWord()
 startInteraction()
@@ -127,10 +127,6 @@ function flipTile(tile, index, array, guess) {
                 tile.dataset.state = "wrong"
                 key.classList.add("wrong")
             }
-            // else if (targetWord.includes(letter)) {
-            //     tile.dataset.state = "wrong-location"
-            //     key.classList.add("wrong-location")
-            // }
 
             if (index === array.length - 1) {
                 tile.addEventListener(
@@ -151,9 +147,18 @@ function getActiveTiles() {
     return guessGrid.querySelectorAll('[data-state="active"]')
 }
 
-function showAlert(message, duration = 1000) {
+function getAllTiles(){
+    return guessGrid.querySelectorAll(".tile")
+}
+
+function showAlert(message, duration = 10000) {
     const alert = document.createElement("div")
-    alert.textContent = message
+
+    if (typeof message == "string"){
+        alert.textContent = message
+    } else {
+        alert.appendChild(message)
+    }
     alert.classList.add("alert")
     alertContainer.prepend(alert)
     if (duration == null) return
@@ -183,6 +188,7 @@ function checkWinLose(guess, tiles) {
     if (guess === targetWord) {
         showAlert("You Win", 5000)
         danceTiles(tiles)
+        showShareAlert()
         stopInteraction()
         return
     }
@@ -190,6 +196,7 @@ function checkWinLose(guess, tiles) {
     const remainingTiles = guessGrid.querySelectorAll(":not([data-letter])")
     if (remainingTiles.length === 0) {
         showAlert(targetWord.toUpperCase(), null)
+        showShareAlert()
         stopInteraction()
     }
 }
@@ -207,4 +214,45 @@ function danceTiles(tiles) {
             )
         }, (index * DANCE_ANIMATION_DURATION) / 5)
     })
+}
+
+function showShareAlert(){
+    const share = document.createElement("button")
+    share.onclick = copyResults()
+    share.innerText = "Share results"
+    share.classList.add("btn")
+
+    showAlert(share)
+}
+
+function copyResults(){
+    const tiles = getAllTiles()
+    var result = ""
+
+    tiles.forEach((tile, index) => {
+        if (tile.dataset.state === "correct"){
+            result += "🟩"
+        } else if (tile.dataset.state === "wrong"){
+            result += "⬛️"
+        }
+
+        console.log(typeof index, index)
+        if ((index+1) % 5 === 0){
+            console.log('made it')
+            result += "\n"
+        }
+    })
+
+    /* Get the text field */
+    var copyResult = document.getElementById("result");
+
+    copyResult.value = "dayli unscramblr\n\n"
+    copyResult.value += result;
+    copyResult.value += "waqaspathan00.github.io/unscramblr"
+
+    /* Select the text field */
+    copyResult.select();
+
+    /* Copy the text inside the text field */
+    navigator.clipboard.writeText(copyResult.value);
 }
