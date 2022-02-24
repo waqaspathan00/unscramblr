@@ -107,6 +107,7 @@ function submitGuess() {
 
     stopInteraction()
     activeTiles.forEach((...params) => flipTile(...params, guess))
+    tries = (activeTiles.length / 5) + 1
 }
 
 function flipTile(tile, index, array, guess) {
@@ -227,7 +228,7 @@ function showShareAlert(){
 
 function copyResults(){
     const tiles = getAllTiles()
-    var result = ""
+    let result = "";
 
     tiles.forEach((tile, index) => {
         if (tile.dataset.state === "correct"){
@@ -236,9 +237,8 @@ function copyResults(){
             result += "⬛️"
         }
 
-        console.log(typeof index, index)
         if ((index+1) % 5 === 0){
-            console.log('made it')
+            // go to next line after 5 squares
             result += "\n"
         }
     })
@@ -254,5 +254,14 @@ function copyResults(){
     copyResult.select();
 
     /* Copy the text inside the text field */
-    navigator.clipboard.writeText(copyResult.value);
+    // navigator.clipboard.writeText(copyResult.value);
+
+    if (
+      /android|iphone|ipad|ipod|webos/i.test(navigator.userAgent) &&
+      !/firefox/i.test(navigator.userAgent)
+    ) {
+        navigator.share({ text: copyResult.value });
+    } else {
+        navigator.clipboard.writeText(copyResult.value);
+    }
 }
