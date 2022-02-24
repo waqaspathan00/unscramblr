@@ -11,7 +11,7 @@ function scramble (word) {
     return letters.join("");
 }
 
-function choice(items){
+function randomChoice(items){
     const index = Math.floor(Math.random() * items.length)
     return items[index]
 }
